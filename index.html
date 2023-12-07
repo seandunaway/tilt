@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<title>tilt</title>
+<style>
+body {
+    margin: 0;
+}
+#echart {
+    height: 100vh;
+    width: 100vw;
+}
+</style>
+<div id='echart'></div>
+<script src='https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js'></script>
+<script type='module'>
+
+let INTERVAL = 60_000
+let ZOOM = 8 * 60 * 60_000
+let echart = echarts.init(document.querySelector('#echart'))
+let source = []
+let dimensions = []
+let last_timestamp = 1
+async function tilt() {
+    let response = await fetch(`./ESZ3/${last_timestamp}`)
+    let text = await response.text()
+    let array = text.split('\n')
+    for (let value of array) {
+        if (!value) continue
+        let object = JSON.parse(value)
+        if (!object.t) continue
+        last_timestamp = object.t
+        source.push(object)
+    }
+}
+await tilt()
+for (let property in source[0])
+    dimensions.push(property)
+let series_defaults = {
+    emphasis: {disabled: true},
+    lineStyle: {width: 5, opacity: 0.5},
+    showSymbol: false,
+}
+echart.setOption({
+    dataset: {source, dimensions},
+    xAxis: {type: 'time'},
+    yAxis: [
+        {name: 'price', type: 'value', min: 'dataMin', max: 'dataMax', position: 'right', splitLine: false},
+        {name: 'percent', type: 'value', min: 0, max: 100, position: 'left', splitLine: false},
+    ],
+    series: [
+        {...series_defaults, name: 'price', type: 'line', encode: {x: 't', y: 'p'}, z: 10},
+        {...series_defaults, name: 'long', type: 'line', encode: {x: 't', y: 'l'}, yAxisIndex: 1},
+        {...series_defaults, name: 'short', type: 'line', encode: {x: 't', y: 's'}, yAxisIndex: 1},
+        {...series_defaults, name: 'positive', type: 'line', encode: {x: 't', y: '+'}, yAxisIndex: 1},
+        {...series_defaults, name: 'negative', type: 'line', encode: {x: 't', y: '-'}, yAxisIndex: 1},
+        {...series_defaults, name: 'long average', type: 'line', encode: {x: 't', y: '+$'}},
+        {...series_defaults, name: 'short average', type: 'line', encode: {x: 't', y: '-$'}},
+    ],
+    axisPointer: {show: true, snap: true, triggerEmphasis: false},
+    dataZoom: {startValue: new Date().getTime() - ZOOM},
+    grid: {show: false},
+    legend: {show: true, selected: {short: false, positive: false, negative: false, ['long average']: false, ['short average']: false}},
+})
+addEventListener('resize', function (event) {echart.resize()})
+setInterval(async function () {
+    await tilt()
+    echart.setOption({dataset: {source}})
+}, INTERVAL)
+
+</script>

@@ -1,0 +1,7 @@
+{
+  "name": "topstep-tilt",
+  "version": "1.0.0",
+  "dependencies": {
+    "ws": "^8.14.2"
+  }
+}
