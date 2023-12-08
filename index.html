@@ -22,10 +22,10 @@ let last_timestamp = 1
 async function tilt() {
     let response = await fetch(`./data/ESZ3.jsonl?${last_timestamp}`)
     let text = await response.text()
-    let array = text.split('\n')
-    for (let value of array) {
-        if (!value) continue
-        let object = JSON.parse(value)
+    let lines = text.split('\n')
+    for (let line of lines) {
+        if (!line) continue
+        let object = JSON.parse(line)
         if (object.t < last_timestamp) continue
         last_timestamp = object.t
         source.push(object)
