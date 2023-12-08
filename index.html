@@ -26,7 +26,7 @@ async function tilt() {
     for (let value of array) {
         if (!value) continue
         let object = JSON.parse(value)
-        if (!object.t) continue
+        if (object.t < last_timestamp) continue
         last_timestamp = object.t
         source.push(object)
     }
