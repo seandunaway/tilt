@@ -16,11 +16,13 @@ body {
 let INTERVAL = 60_000
 let ZOOM = 8 * 60 * 60_000
 let echart = echarts.init(document.querySelector('#echart'))
+let search = new URLSearchParams(window.location.search)
+let symbol = search.get('s') ?? 'ESZ3'
 let source = []
 let dimensions = []
 let last_timestamp = 1
 async function tilt() {
-    let response = await fetch(`./data/ESZ3.jsonl?${last_timestamp}`)
+    let response = await fetch(`./data/${symbol}.jsonl?${last_timestamp}`)
     let text = await response.text()
     let lines = text.split('\n')
     for (let line of lines) {
