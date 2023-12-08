@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 let PORT = 8075
+let DEFAULT_AFTER = 60_000 * 10 // 10 minutes ago
 
 import {open, readdir} from 'node:fs/promises'
 import {createServer} from 'node:http'
@@ -18,7 +19,7 @@ server.on('request', async function (req, res) {
 
     let match = url.match(/\/(?<symbol>[A-Z0-9]{4})\/?(?<after>\d+)?-?(?<before>\d+)?$/)
     if (match?.groups?.symbol) {
-        let after = parseInt(match.groups.after) || new Date().getTime() - 60 * 10_000 // 10 minutes ago
+        let after = parseInt(match.groups.after) || new Date().getTime() - DEFAULT_AFTER
         let before = parseInt(match.groups.before) || new Date().getTime()
         response = await data(match.groups.symbol, after, before)
     }
