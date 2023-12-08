@@ -14,8 +14,9 @@ server.on('listening', function () {
 server.on('request', async function (req, res) {
     let response = ''
     let url = req.url ? req.url : '/'
-    if (url == '/') response = await index()
     if (url == '/list') response = await list()
+    let match_index = url.match(/^\/(?<search>\?.+)?$/)
+    if (match_index) response = await index()
 
     // https://regex101.com/r/pz1MB1
     let match_data = url.match(/\/(?:data\/)?(?<symbol>[A-Z0-9]{4})(?:\.jsonl)?\/?\??(?<after>\d+)?-?(?<before>\d+)?/)
