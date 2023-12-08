@@ -47,7 +47,7 @@ echart.setOption({
         {name: 'percent', type: 'value', min: 'dataMin', max: 'dataMax', position: 'left', splitLine: false},
     ],
     series: [
-        {...series_defaults, name: 'price', type: 'line', encode: {x: 't', y: 'p'}, z: 10},
+        {...series_defaults, name: 'price', type: 'line', encode: {x: 't', y: 'p'}, lineStyle: {width: 5, opacity: 0.75}, z: 10},
         {...series_defaults, name: 'long', type: 'line', encode: {x: 't', y: 'l'}, yAxisIndex: 1},
         {...series_defaults, name: 'short', type: 'line', encode: {x: 't', y: 's'}, yAxisIndex: 1},
         {...series_defaults, name: 'positive', type: 'line', encode: {x: 't', y: '+'}, yAxisIndex: 1},
