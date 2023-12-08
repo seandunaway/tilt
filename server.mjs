@@ -14,7 +14,7 @@ server.on('listening', function () {
 server.on('request', async function (req, res) {
     let response = ''
     let url = req.url ? req.url : '/'
-    if (url == '/list') response = await list()
+
     let match_index = url.match(/^\/(?<search>\?.+)?$/)
     if (match_index) response = await index()
 
@@ -25,6 +25,8 @@ server.on('request', async function (req, res) {
         let before = parseInt(match_data.groups.before) || new Date().getTime()
         response = await data(match_data.groups.symbol, after, before)
     }
+
+    if (url == '/list') response = await list()
 
     res.end(response)
 })
