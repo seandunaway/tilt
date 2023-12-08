@@ -20,7 +20,7 @@ let source = []
 let dimensions = []
 let last_timestamp = 1
 async function tilt() {
-    let response = await fetch(`./ESZ3/${last_timestamp}`)
+    let response = await fetch(`./data/ESZ3.jsonl?${last_timestamp}`)
     let text = await response.text()
     let array = text.split('\n')
     for (let value of array) {

@@ -17,7 +17,8 @@ server.on('request', async function (req, res) {
     if (url == '/') response = await index()
     if (url == '/list') response = await list()
 
-    let match = url.match(/\/(?<symbol>[A-Z0-9]{4})\/?(?<after>\d+)?-?(?<before>\d+)?$/)
+    // https://regex101.com/r/pz1MB1
+    let match = url.match(/\/(?:data\/)?(?<symbol>[A-Z0-9]{4})(?:\.jsonl)?\/?\??(?<after>\d+)?-?(?<before>\d+)?/)
     if (match?.groups?.symbol) {
         let after = parseInt(match.groups.after) || new Date().getTime() - DEFAULT_AFTER
         let before = parseInt(match.groups.before) || new Date().getTime()
