@@ -24,7 +24,7 @@ ws.on('open', function() {
     ws.send('{"arguments":[],"target":"SubscribeTilt","type":1}\x1e')
 })
 ws.on('close', function(code, reason) {
-    console.error('error:', reason)
+    console.error('close:', reason.toString())
     exit(code)
 })
 ws.on('error', function(error) {
