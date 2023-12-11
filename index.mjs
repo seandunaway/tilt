@@ -24,11 +24,11 @@ ws.on('open', function() {
     ws.send('{"arguments":[],"target":"SubscribeTilt","type":1}\x1e')
 })
 ws.on('close', function(code, reason) {
-    console.error('close:', reason.toString())
+    console.error(new Date().toLocaleString(), `close`, reason.toString())
     exit(code)
 })
 ws.on('error', function(error) {
-    console.error('error:', error)
+    console.error(new Date().toLocaleString(), 'error', error)
     exit(1)
 })
 ws.on('message', function(buffer) {
