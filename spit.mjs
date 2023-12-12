@@ -7,12 +7,12 @@ import {execSync} from 'node:child_process'
 
 let last_spit = ''
 setInterval(function () {
-    let es_buffer = execSync(`tail -n1 ./data/ESZ3.jsonl`)
+    let es_buffer = execSync(`tail -n1 ./data/ESH4.jsonl`)
     let es_text = es_buffer.toString()
     if (!es_text) return
     let es = JSON.parse(es_text)
 
-    let nq_buffer = execSync(`tail -n1 ./data/NQZ3.jsonl`)
+    let nq_buffer = execSync(`tail -n1 ./data/NQH4.jsonl`)
     let nq_text = nq_buffer.toString()
     if (!nq_text) return
     let nq = JSON.parse(nq_text)
