@@ -38,8 +38,10 @@ await tilt()
 for (let property in source[0])
     dimensions.push(property)
 let series_defaults = {
+    type: 'line',
     emphasis: {disabled: true},
     lineStyle: {width: 5, opacity: 0.5},
+    markLine: {data: [{yAxis: 50}]},
     showSymbol: false,
 }
 echart.setOption({
@@ -50,13 +52,13 @@ echart.setOption({
         {name: 'percent', type: 'value', min: 'dataMin', max: 'dataMax', position: 'left', splitLine: false},
     ],
     series: [
-        {...series_defaults, name: 'price', type: 'line', encode: {x: 't', y: 'p'}, lineStyle: {width: 5, opacity: 0.75}, z: 10},
-        {...series_defaults, name: 'long', type: 'line', encode: {x: 't', y: 'l'}, yAxisIndex: 1},
-        {...series_defaults, name: 'short', type: 'line', encode: {x: 't', y: 's'}, yAxisIndex: 1},
-        {...series_defaults, name: 'positive', type: 'line', encode: {x: 't', y: '+'}, yAxisIndex: 1},
-        {...series_defaults, name: 'negative', type: 'line', encode: {x: 't', y: '-'}, yAxisIndex: 1},
-        {...series_defaults, name: 'long average', type: 'line', encode: {x: 't', y: '+$'}},
-        {...series_defaults, name: 'short average', type: 'line', encode: {x: 't', y: '-$'}},
+        {...series_defaults, name: 'price', encode: {x: 't', y: 'p'}, lineStyle: {width: 5, opacity: 0.75}, z: 10},
+        {...series_defaults, name: 'long', encode: {x: 't', y: 'l'}, yAxisIndex: 1},
+        {...series_defaults, name: 'short', encode: {x: 't', y: 's'}, yAxisIndex: 1},
+        {...series_defaults, name: 'positive', encode: {x: 't', y: '+'}, yAxisIndex: 1},
+        {...series_defaults, name: 'negative', encode: {x: 't', y: '-'}, yAxisIndex: 1},
+        {...series_defaults, name: 'long average', encode: {x: 't', y: '+$'}},
+        {...series_defaults, name: 'short average', encode: {x: 't', y: '-$'}},
     ],
     axisPointer: {show: true, snap: true, triggerEmphasis: false},
     dataZoom: {startValue: new Date().getTime() - ZOOM},
