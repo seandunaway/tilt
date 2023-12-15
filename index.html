@@ -12,16 +12,17 @@ body {
 <div id='echart'></div>
 <script src='https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js'></script>
 <script type='module'>
-
 let DEFAULT_SYMBOL = 'ESH4'
 let INTERVAL = 60_000
 let ZOOM = 8 * 60 * 60_000
-let echart = echarts.init(document.querySelector('#echart'))
 let search = new URLSearchParams(window.location.search)
 let symbol = search.get('s') ?? DEFAULT_SYMBOL
+let after = parseInt(search.get('after'))
+let before = parseInt(search.get('before'))
+let echart = echarts.init(document.querySelector('#echart'))
 let source = []
 let dimensions = []
-let last_timestamp = 1
+let last_timestamp = 0
 async function tilt() {
     let response = await fetch(`./data/${symbol}.jsonl?${last_timestamp}`)
     let text = await response.text()
@@ -44,7 +45,7 @@ let series_defaults = {
     markLine: {data: [{yAxis: 50}], lineStyle: {color: "lightgray", width: 5}},
     showSymbol: false,
 }
-echart.setOption({
+let option = {
     dataset: {source, dimensions},
     xAxis: {type: 'time'},
     yAxis: [
@@ -61,14 +62,14 @@ echart.setOption({
         {...series_defaults, name: 'short average', encode: {x: 't', y: '-$'}},
     ],
     axisPointer: {show: true, snap: true, triggerEmphasis: false},
-    dataZoom: {startValue: new Date().getTime() - ZOOM},
+    dataZoom: {startValue: after || new Date().getTime() - ZOOM, endValue: before},
     grid: {show: false},
     legend: {show: true, selected: {short: false, positive: false, negative: false, ['long average']: false, ['short average']: false}},
-})
+}
+echart.setOption(option)
 addEventListener('resize', function (event) {echart.resize()})
 setInterval(async function () {
     await tilt()
     echart.setOption({dataset: {source}})
 }, INTERVAL)
-
 </script>
