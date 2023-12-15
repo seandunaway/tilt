@@ -110,7 +110,9 @@ function create_data(object, quote) {
 }
 
 function is_valid_data(data) {
-    if (data.l === 0 || data.l === 100) return
+    for (let property in data) {
+        if (!data[property]) return
+    }
     return true
 }
 
