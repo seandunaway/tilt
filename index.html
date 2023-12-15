@@ -62,7 +62,7 @@ let option = {
         {...series_defaults, name: 'short average', encode: {x: 't', y: '-$'}},
     ],
     axisPointer: {show: true, snap: true, triggerEmphasis: false},
-    dataZoom: {startValue: after || new Date().getTime() - ZOOM, endValue: before},
+    dataZoom: {startValue: after || source[source.length - 1].t - ZOOM, endValue: before},
     grid: {show: false},
     legend: {show: true, selected: {short: false, positive: false, negative: false, ['long average']: false, ['short average']: false}},
 }
